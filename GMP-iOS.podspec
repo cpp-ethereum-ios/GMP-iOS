@@ -5,11 +5,11 @@ Pod::Spec.new do |spec|
   spec.authors = "GMP Authors"
   spec.license = "LGPL"
 
-  spec.version = "6.1.1.0"
+  spec.version = "6.1.1.1"
   spec.source = { :http => 'https://gmplib.org/download/gmp/gmp-6.1.1.tar.bz2' }
 
   spec.platform = :ios
-  spec.ios.deployment_target = '9.0'
+  spec.ios.deployment_target = '8.0'
 
   spec.prepare_command = <<-CMD
     build_for_ios() {
