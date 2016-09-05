@@ -5,7 +5,7 @@ Pod::Spec.new do |spec|
   spec.authors = "GMP Authors"
   spec.license = "LGPL"
 
-  spec.version = "6.1.1.1"
+  spec.version = "6.1.1.2"
   spec.source = { :http => 'https://gmplib.org/download/gmp/gmp-6.1.1.tar.bz2' }
 
   spec.platform = :ios
@@ -85,5 +85,5 @@ Pod::Spec.new do |spec|
   CMD
 
   spec.source_files = "gmp.h", "gmpxx.h"
-  spec.ios.vendored_libraries = "build/libgmp.dylib"
+  spec.ios.vendored_libraries = "build/libgmp*.dylib"
 end
