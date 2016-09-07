@@ -5,7 +5,7 @@ Pod::Spec.new do |spec|
   spec.authors = "GMP Authors"
   spec.license = "LGPL"
 
-  spec.version = "6.1.1.3"
+  spec.version = "6.1.1.4"
   spec.source = { :http => 'https://gmplib.org/download/gmp/gmp-6.1.1.tar.bz2' }
 
   spec.platform = :ios
@@ -62,7 +62,7 @@ Pod::Spec.new do |spec|
         RANLIB=`xcrun -sdk $PLATFORM -find ranlib` \
         STRIP=`xcrun -sdk $PLATFORM -find strip` \
         CPPFLAGS="-arch $ARCH -isysroot $SDKPATH" \
-        LDFLAGS="-arch $ARCH" \
+        LDFLAGS="-arch $ARCH -headerpad_max_install_names" \
         --host=$HOST \
         --disable-assembly \
         --enable-cxx \
@@ -73,12 +73,12 @@ Pod::Spec.new do |spec|
     }
 
     create_universal_library() {
-      pushd build
-        lipo -create -output libgmp.10.dylib \
-          {armv7,arm64,i386,x86_64}/lib/libgmp.10.dylib
-        lipo -create -output libgmpxx.4.dylib \
-          {armv7,arm64,i386,x86_64}/lib/libgmpxx.4.dylib
-      popd
+      lipo -create -output libgmp.dylib \
+        build/{armv7,arm64,i386,x86_64}/lib/libgmp.dylib
+      lipo -create -output libgmpxx.dylib \
+        build/{armv7,arm64,i386,x86_64}/lib/libgmpxx.dylib
+      install_name_tool -id "$(pwd)/libgmp.dylib" libgmp.dylib
+      install_name_tool -id "$(pwd)/libgmpxx.dylib" libgmpxx.dylib
     }
 
     clean() {
@@ -89,5 +89,5 @@ Pod::Spec.new do |spec|
   CMD
 
   spec.source_files = "gmp.h", "gmpxx.h"
-  spec.ios.vendored_libraries = "build/libgmp*.dylib"
+  spec.ios.vendored_libraries = "libgmp.dylib", "libgmpxx.dylib"
 end
