@@ -5,7 +5,7 @@ Pod::Spec.new do |spec|
   spec.authors = "GMP Authors"
   spec.license = "LGPL"
 
-  spec.version = "6.1.1.2"
+  spec.version = "6.1.1.3"
   spec.source = { :http => 'https://gmplib.org/download/gmp/gmp-6.1.1.tar.bz2' }
 
   spec.platform = :ios
@@ -73,8 +73,12 @@ Pod::Spec.new do |spec|
     }
 
     create_universal_library() {
-      lipo -create -output $(pwd)/build/libgmp.dylib \
-        $(pwd)/build/{armv7,arm64,i386,x86_64}/lib/libgmp.dylib
+      pushd build
+        lipo -create -output libgmp.10.dylib \
+          {armv7,arm64,i386,x86_64}/lib/libgmp.10.dylib
+        lipo -create -output libgmpxx.4.dylib \
+          {armv7,arm64,i386,x86_64}/lib/libgmpxx.4.dylib
+      popd
     }
 
     clean() {
