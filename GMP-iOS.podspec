@@ -5,7 +5,7 @@ Pod::Spec.new do |spec|
   spec.authors = "GMP Authors"
   spec.license = "LGPL"
 
-  spec.version = "6.1.1.4"
+  spec.version = "6.1.1.5"
   spec.source = { :http => 'https://gmplib.org/download/gmp/gmp-6.1.1.tar.bz2' }
 
   spec.platform = :ios
@@ -77,8 +77,28 @@ Pod::Spec.new do |spec|
         build/{armv7,arm64,i386,x86_64}/lib/libgmp.dylib
       lipo -create -output libgmpxx.dylib \
         build/{armv7,arm64,i386,x86_64}/lib/libgmpxx.dylib
+      update_dylib_names
+      update_dylib_references
+    }
+
+    update_dylib_names() {
       install_name_tool -id "$(pwd)/libgmp.dylib" libgmp.dylib
       install_name_tool -id "$(pwd)/libgmpxx.dylib" libgmpxx.dylib
+    }
+
+    update_dylib_references() {
+      update_dylib_reference_for_architecture armv7
+      update_dylib_reference_for_architecture arm64
+      update_dylib_reference_for_architecture i386
+      update_dylib_reference_for_architecture x86_64
+    }
+
+    update_dylib_reference_for_architecture() {
+      ARCH=$1
+      install_name_tool -change \
+        "$(pwd)/build/$ARCH/lib/libgmp.10.dylib" \
+        "$(pwd)/libgmp.dylib" \
+        libgmpxx.dylib
     }
 
     clean() {
